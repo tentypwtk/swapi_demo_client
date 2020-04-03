@@ -64,7 +64,8 @@ class SearchViewModelTest : KoinTest {
     fun `updated search phrase triggers api calls`() {
         // when
         viewModel.searchPhrase.postValue("ok")
-
+        testScheduler.advanceTimeBy(2, TimeUnit.SECONDS)
+        
         // then
         verify(api).searchPlanet("ok")
     }
