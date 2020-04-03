@@ -1,4 +1,4 @@
-package com.grapplo.swapidemo
+package com.grapplo.swapidemo.presentation
 
 import android.os.Bundle
 import android.util.Log
@@ -11,7 +11,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SearchFragment : Fragment() {
 
-    val viewModel by viewModel<SearchViewModel>()
+    private val viewModel by viewModel<SearchViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
