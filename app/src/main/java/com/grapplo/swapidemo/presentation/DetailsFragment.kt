@@ -1,4 +1,4 @@
-package com.grapplo.swapidemo
+package com.grapplo.swapidemo.presentation
 
 import androidx.fragment.app.Fragment
 

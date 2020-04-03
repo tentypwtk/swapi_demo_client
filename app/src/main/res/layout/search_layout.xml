@@ -6,7 +6,7 @@
     <data>
         <variable
             name="viewModel"
-            type="com.grapplo.swapidemo.SearchViewModel" />
+            type="com.grapplo.swapidemo.presentation.SearchViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
