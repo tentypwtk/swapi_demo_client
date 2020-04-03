@@ -60,6 +60,10 @@ dependencies {
     implementation "androidx.recyclerview:recyclerview:1.1.0"
     implementation "androidx.recyclerview:recyclerview-selection:1.1.0-rc01"
 
+    testImplementation "org.mockito:mockito-core:2.23.0"
+    testImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0"
+
+
     /**
      * Navigation
      */
@@ -117,4 +121,21 @@ dependencies {
     testImplementation 'androidx.test.ext:truth:' + rootProject.extTruthVersion
 
     implementation 'androidx.annotation:annotation:' + rootProject.androidxLibVersion;
+
+    implementation "androidx.lifecycle:lifecycle-reactivestreams:$lifecycle_version"
+    implementation "androidx.lifecycle:lifecycle-reactivestreams-ktx:$lifecycle_version"
+
+    /**
+     * paging
+     */
+    implementation "androidx.paging:paging-runtime:$paging_version" // For Kotlin use paging-runtime-ktx
+    // alternatively - without Android dependencies for testing
+    testImplementation "androidx.paging:paging-common:$paging_version" // For Kotlin use paging-common-ktx
+    // optional - RxJava support
+    implementation "androidx.paging:paging-rxjava2:$paging_version" // For Kotlin use paging-rxjava2-ktx
+
+    /**
+     * testing live data
+     */
+    testImplementation 'android.arch.core:core-testing:1.1.1'
 }
