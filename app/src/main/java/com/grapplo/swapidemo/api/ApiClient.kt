@@ -1,15 +1,13 @@
 package com.grapplo.swapidemo.api
 
+import com.grapplo.swapidemo.api.response.PlanetsResponse
 import com.grapplo.swapidemo.api.response.SwapiResponse
 import com.grapplo.swapidemo.domain.Person
 import com.grapplo.swapidemo.domain.Planet
 import io.reactivex.Single
-import retrofit2.http.FormUrlEncoded
-import retrofit2.http.POST
-import retrofit2.http.Path
-import retrofit2.http.Query
+import retrofit2.http.*
 
 interface ApiClient {
-    @POST("/planet/")
+    @GET("planets")
     fun searchPlanet(@Query("search") phrase: String): Single<SwapiResponse<Planet>>
 }

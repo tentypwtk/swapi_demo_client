@@ -24,7 +24,7 @@ class SearchResultAdapter : RecyclerView.Adapter<SearchResultAdapter.VH>() {
         holder.bind(items[position])
     }
 
-    class VH(view: View) : RecyclerView.ViewHolder(view) {
+    class VH(val view: View) : RecyclerView.ViewHolder(view) {
         private val labelLeft by lazy {
             view.findViewById<TextView>(R.id.left_label)
         }
@@ -34,7 +34,8 @@ class SearchResultAdapter : RecyclerView.Adapter<SearchResultAdapter.VH>() {
 
         fun bind(searchResult: SearchResult) {
             labelLeft.text = searchResult.name
-            labelRight.text = searchResult.size.toString()
+            labelRight.text =
+                searchResult.size?.toString() ?: view.context.getString(R.string.unknown_value)
         }
     }
 }
