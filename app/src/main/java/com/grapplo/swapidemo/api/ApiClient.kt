@@ -1,8 +1,6 @@
 package com.grapplo.swapidemo.api
 
-import com.grapplo.swapidemo.api.response.PlanetsResponse
 import com.grapplo.swapidemo.api.response.SwapiResponse
-import com.grapplo.swapidemo.domain.Person
 import com.grapplo.swapidemo.domain.Planet
 import io.reactivex.Single
 import retrofit2.http.*
