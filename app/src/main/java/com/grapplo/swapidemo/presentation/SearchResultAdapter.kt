@@ -11,6 +11,10 @@ import com.grapplo.swapidemo.domain.SearchResult
 class SearchResultAdapter : RecyclerView.Adapter<SearchResultAdapter.VH>() {
 
     var items: List<SearchResult> = emptyList()
+        set(value) {
+            field = value
+            notifyDataSetChanged()
+        }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VH =
         LayoutInflater
