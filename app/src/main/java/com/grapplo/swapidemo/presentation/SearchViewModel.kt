@@ -27,6 +27,17 @@ class SearchViewModel constructor(val apiClient: ApiClient) :
     init {
         toState(State.Idle)
         projectPhraseToSearch()
+
+        state.observeForever { state ->
+            when (state) {
+                is State.Result -> {
+                    result.postValue(state.result)
+                }
+                is State.Idle -> {
+                    result.postValue(emptyList())
+                }
+            }
+        }
     }
 
     private fun projectPhraseToSearch() {
@@ -34,11 +45,18 @@ class SearchViewModel constructor(val apiClient: ApiClient) :
             .debounce(2, TimeUnit.SECONDS)
             .distinctUntilChanged()
             .doOnNext { toState(State.Searching(it)) }
-            .flatMapCompletable { searchPhrase(it) }
+            .switchMapCompletable { phrase ->
+                if (phrase.isNotBlank()) {
+                    searchPhrase(phrase)
+                } else {
+                    Completable.fromAction { toState(State.Idle) }
+                }
+            }
             .subscribeOn(Schedulers.computation())
             .subscribe({
                 Log.d("OK", "")
             }, {
+                toState(State.Error(it))
                 Log.e("Err", "ERROR> $it")
             })
             .toDisposables()
