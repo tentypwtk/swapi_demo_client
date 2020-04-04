@@ -28,7 +28,6 @@ class SearchFragment : Fragment() {
             .inflate(inflater, container, false).let {
                 it.lifecycleOwner = this
                 it.viewModel = this@SearchFragment.viewModel
-                it.adapter = this@SearchFragment.adapter
                 it.root
             }
 
