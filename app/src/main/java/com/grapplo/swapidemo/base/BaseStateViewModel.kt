@@ -1,16 +1,20 @@
 package com.grapplo.swapidemo.base
 
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 
-abstract class BaseStateViewModel<T: Any> : ViewModel() {
+abstract class BaseStateViewModel<T : Any> : ViewModel() {
     open val state = MutableLiveData<T>()
 
     fun toState(s: T) {
         state.postValue(s)
     }
+
+    val isLoading
+        get() = Transformations.map(state) { it is StateLoading }
 
     fun <T> MutableLiveData<T>.initWith(initialValue: T): MutableLiveData<T> =
         apply { value = initialValue }
