@@ -5,8 +5,12 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
+import android.widget.Spinner
+import android.widget.SpinnerAdapter
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import com.grapplo.swapidemo.R
 import com.grapplo.swapidemo.databinding.SearchLayoutBinding
 import kotlinx.android.synthetic.main.search_layout.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -39,11 +43,27 @@ class SearchFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        subject_picker.attachEnumAdapter<SearchViewModel.SearchMode> { _ ->
+        }
+
         recycler_view.adapter = adapter
 
         viewModel.result.observe(viewLifecycleOwner, Observer { results ->
             adapter.items = results
         })
     }
+
+    private inline fun <reified T : Enum<T>> Spinner.attachEnumAdapter(crossinline callback: (T) -> Unit): SpinnerAdapter {
+        return object : ArrayAdapter<String>(requireContext(), android.R.layout.simple_list_item_1) {
+            init {
+                addAll(enumValues<T>().map { it.name.toLowerCase().capitalize() }.toList())
+                this@attachEnumAdapter.adapter = this
+                this.notifyDataSetChanged()
+            }
+
+
+        }
+    }
+
 
 }

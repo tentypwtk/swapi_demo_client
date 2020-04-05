@@ -2,4 +2,6 @@
     <string name="app_name">Swapi demo</string>
     <string name="unknown_value">Unknown</string>
     <string name="search_by_name">Search planet by name…</string>
+    <string name="subject_planet">Planet</string>
+    <string name="subject_person">Person</string>
 </resources>

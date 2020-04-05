@@ -1,7 +1,9 @@
 package com.grapplo.swapidemo.presentation
 
 import android.util.Log
+import androidx.annotation.StringRes
 import androidx.lifecycle.MutableLiveData
+import com.grapplo.swapidemo.R
 import com.grapplo.swapidemo.api.ApiClient
 import com.grapplo.swapidemo.base.BaseStateViewModel
 import com.grapplo.swapidemo.base.StateFail
@@ -18,6 +20,11 @@ class SearchViewModel constructor(val apiClient: ApiClient) :
 
     val searchPhraseUI = MutableLiveData<String>().apply {
         observeForever { _searchPhrase.onNext(it) }
+    }
+
+    enum class SearchMode(@StringRes label: Int) {
+        PLANET(R.string.subject_planet),
+        PERSON(R.string.subject_person)
     }
 
     val result = MutableLiveData<List<SearchResult>>()
