@@ -2,10 +2,12 @@ package com.grapplo.swapidemo
 
 import android.widget.ProgressBar
 import android.widget.Spinner
+import android.widget.TextView
 import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.launchActivity
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.IdlingRegistry
+import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.action.ViewActions.typeText
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.*
@@ -13,6 +15,7 @@ import androidx.test.ext.junit.rules.activityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.reactivex.plugins.RxJavaPlugins
 import io.reactivex.schedulers.TestScheduler
+import org.hamcrest.Matchers.allOf
 import org.hamcrest.core.IsNot.not
 import org.junit.Before
 import org.junit.Rule
@@ -70,4 +73,14 @@ class SearchScreenTest {
         launchActivity<MainActivity>()
         onView(isAssignableFrom(Spinner::class.java)).check(matches(isDisplayed()))
     }
+
+    @Test
+    fun dropdownOffersPlanetsAndPeopleToPickFrom() {
+        launchActivity<MainActivity>()
+        onView(withId(R.id.subject_picker)).perform(click())
+        onView(allOf(isAssignableFrom(TextView::class.java), withText("Planet"))).check(matches(isDisplayed()))
+        onView(allOf(isAssignableFrom(TextView::class.java), withText("Person"))).check(matches(isDisplayed()))
+    }
+
+
 }
