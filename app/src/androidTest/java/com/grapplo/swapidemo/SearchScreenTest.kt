@@ -1,6 +1,7 @@
 package com.grapplo.swapidemo
 
 import android.widget.ProgressBar
+import android.widget.Spinner
 import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.launchActivity
 import androidx.test.espresso.Espresso.onView
@@ -62,5 +63,11 @@ class SearchScreenTest {
         onView(withId(R.id.search_input)).perform(typeText("Yoda"))
         testScheduler.advanceTimeBy(3, TimeUnit.SECONDS)
         onView(isAssignableFrom(ProgressBar::class.java)).check(matches(isDisplayed()))
+    }
+
+    @Test
+    fun dropdownToPickPlanetsOrPeopleIsVisible() {
+        launchActivity<MainActivity>()
+        onView(isAssignableFrom(Spinner::class.java)).check(matches(isDisplayed()))
     }
 }
