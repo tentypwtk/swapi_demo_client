@@ -95,6 +95,7 @@ class SearchViewModel constructor(val apiClient: ApiClient) :
                     response.results.map { SearchResult.PersonResult(it) }
                 }
         }
+            .subscribeOn(Schedulers.computation())
             .doOnSuccess {
                 toState(State.Result(phrase, it))
             }
