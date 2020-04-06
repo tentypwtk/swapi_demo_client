@@ -39,7 +39,13 @@ class SearchResultAdapter : RecyclerView.Adapter<SearchResultAdapter.VH>() {
         fun bind(searchResult: SearchResult) {
             labelLeft.text = searchResult.name
             labelRight.text =
-                searchResult.size?.toString() ?: view.context.getString(R.string.unknown_value)
+                when {
+                    searchResult.size != null -> "%d %s".format(
+                        searchResult.size,
+                        searchResult.sizeUnit
+                    )
+                    else -> view.context.getString(R.string.unknown_value)
+                }
         }
     }
 }
