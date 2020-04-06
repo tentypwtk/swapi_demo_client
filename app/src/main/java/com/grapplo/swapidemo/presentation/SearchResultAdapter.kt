@@ -12,7 +12,7 @@ class SearchResultAdapter : RecyclerView.Adapter<SearchResultAdapter.VH>() {
 
     var items: List<SearchResult> = emptyList()
         set(value) {
-            field = value
+            field = value.sortedBy { it.name }
             notifyDataSetChanged()
         }
 
