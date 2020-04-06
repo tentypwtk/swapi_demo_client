@@ -1,7 +1,5 @@
 package com.grapplo.swapidemo.domain
 
-import androidx.core.text.isDigitsOnly
-
 sealed class SearchResult {
     abstract val name: String
     abstract val size: Int?

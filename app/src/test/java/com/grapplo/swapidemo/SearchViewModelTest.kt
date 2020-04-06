@@ -131,7 +131,7 @@ class SearchViewModelTest : KoinTest {
 
     @Test
     fun `search phrase completes without errors`() {
-        viewModel.searchPhrase("anything").test().assertNoErrors().assertComplete()
+        viewModel.searchPhrase("anything", SearchViewModel.SearchMode.PLANET).test().assertNoErrors().assertComplete()
     }
 
     companion object {
