@@ -114,16 +114,15 @@ class SearchScreenTest : KoinTest {
         // when
         onView(withId(R.id.subject_picker)).perform(click())
         onView(withText("Person")).perform(click())
-        onView(withId(R.id.search_input)).perform(typeText("A"))
+        onView(withId(R.id.search_input)).perform(typeText("A")) // search "A" within people
         testScheduler.advanceTimeBy(3, TimeUnit.SECONDS)
         onView(withId(R.id.subject_picker)).perform(click())
-        onView(withText("Planet")).perform(click())
-        onView(withId(R.id.search_input)).perform(typeText("B"))
+        onView(withText("Planet")).perform(click()) // search "A" within planets
         testScheduler.advanceTimeBy(3, TimeUnit.SECONDS)
 
         // then
-        verify(apiClient, times(1)).searchPlanet(any())
-        verify(apiClient, times(1)).searchPerson(any())
+        verify(apiClient).searchPerson(any())
+        verify(apiClient).searchPlanet(any())
     }
 
 

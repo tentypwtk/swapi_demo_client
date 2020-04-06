@@ -5,12 +5,12 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Spinner
 import android.widget.SpinnerAdapter
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import com.grapplo.swapidemo.R
 import com.grapplo.swapidemo.databinding.SearchLayoutBinding
 import kotlinx.android.synthetic.main.search_layout.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -43,7 +43,8 @@ class SearchFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        subject_picker.attachEnumAdapter<SearchViewModel.SearchMode> { _ ->
+        subject_picker.attachEnumAdapter<SearchViewModel.SearchMode> { subject ->
+            viewModel.subject.postValue(subject)
         }
 
         recycler_view.adapter = adapter
@@ -53,12 +54,26 @@ class SearchFragment : Fragment() {
         })
     }
 
-    private inline fun <reified T : Enum<T>> Spinner.attachEnumAdapter(crossinline callback: (T) -> Unit): SpinnerAdapter {
-        return object : ArrayAdapter<String>(requireContext(), android.R.layout.simple_list_item_1) {
+    private inline fun <reified T : Enum<T>> Spinner.attachEnumAdapter(
+        crossinline callback: (T) -> Unit = {}
+    ): SpinnerAdapter {
+        return object :
+            ArrayAdapter<String>(requireContext(), android.R.layout.simple_list_item_1) {
             init {
                 addAll(enumValues<T>().map { it.name.toLowerCase().capitalize() }.toList())
                 this@attachEnumAdapter.adapter = this
                 this.notifyDataSetChanged()
+                onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                    override fun onNothingSelected(parent: AdapterView<*>?) = Unit
+                    override fun onItemSelected(
+                        parent: AdapterView<*>?,
+                        view: View?,
+                        position: Int,
+                        id: Long
+                    ) {
+                        enumValues<T>()[position].apply(callback)
+                    }
+                }
             }
 
 
