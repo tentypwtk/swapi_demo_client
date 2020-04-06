@@ -131,7 +131,9 @@ class SearchViewModelTest : KoinTest {
 
     @Test
     fun `search phrase completes without errors`() {
-        viewModel.searchPhrase("anything", SearchViewModel.SearchMode.PLANET).test().assertNoErrors().assertComplete()
+        val observer = viewModel.searchPhrase("anything", SearchViewModel.SearchMode.PLANET).test()
+        testScheduler.advanceTimeBy(3, TimeUnit.SECONDS)
+        observer.assertNoErrors().assertComplete()
     }
 
     companion object {
