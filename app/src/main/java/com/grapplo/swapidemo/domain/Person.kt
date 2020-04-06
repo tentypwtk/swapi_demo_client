@@ -10,8 +10,8 @@ data class Person(
     val birth_year: String,
     val gender: String,
     val homeworld: String,
-    val films: String,
-    val species: String,
+    val films: List<String>,
+    val species: List<String>,
     val vehicles: List<String>,
     val starships: List<String>,
     val url: String
