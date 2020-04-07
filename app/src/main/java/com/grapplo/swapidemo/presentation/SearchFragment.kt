@@ -11,7 +11,11 @@ import android.widget.Spinner
 import android.widget.SpinnerAdapter
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.navigation.NavDirections
+import androidx.navigation.fragment.findNavController
 import com.grapplo.swapidemo.databinding.SearchLayoutBinding
+import com.grapplo.swapidemo.domain.SearchResult
+import com.grapplo.swapidemo.domain.SwEntity
 import kotlinx.android.synthetic.main.search_layout.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -48,6 +52,9 @@ class SearchFragment : Fragment() {
         }
 
         recycler_view.adapter = adapter
+        adapter.onItemSelected = { _, selectedResult ->
+            findNavController().navigate(SearchFragmentDirections.openDetails(selectedResult.item))
+        }
 
         viewModel.result.observe(viewLifecycleOwner, Observer { results ->
             adapter.items = results

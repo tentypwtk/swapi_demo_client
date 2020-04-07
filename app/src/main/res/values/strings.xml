@@ -1,7 +1,10 @@
 <resources>
     <string name="app_name">Swapi demo</string>
     <string name="unknown_value">Unknown</string>
-    <string name="search_by_name">Search planet by name…</string>
+    <string name="search_by_hint">Search %1$s by name…</string>
     <string name="subject_planet">Planet</string>
     <string name="subject_person">Person</string>
+    <string name="argument_details">argument_details</string>
+    <string name="search_title">Search</string>
+    <string name="details_title">Details</string>
 </resources>
