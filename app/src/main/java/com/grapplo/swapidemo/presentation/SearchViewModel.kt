@@ -1,14 +1,18 @@
 package com.grapplo.swapidemo.presentation
 
+import android.annotation.SuppressLint
+import android.content.Context
 import android.util.Log
 import androidx.annotation.StringRes
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Transformations
 import com.grapplo.swapidemo.R
 import com.grapplo.swapidemo.api.ApiClient
 import com.grapplo.swapidemo.base.BaseStateViewModel
 import com.grapplo.swapidemo.base.StateFail
 import com.grapplo.swapidemo.base.StateLoading
 import com.grapplo.swapidemo.domain.SearchResult
+import com.grapplo.swapidemo.domain.SwEntity
 import com.grapplo.swapidemo.presentation.SearchViewModel.SearchMode.PERSON
 import com.grapplo.swapidemo.presentation.SearchViewModel.SearchMode.PLANET
 import io.reactivex.Completable
@@ -16,7 +20,10 @@ import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.BehaviorSubject
 import java.util.concurrent.TimeUnit
 
-class SearchViewModel constructor(val apiClient: ApiClient) :
+class SearchViewModel constructor(
+    private val apiClient: ApiClient,
+    private val context: Context
+) :
     BaseStateViewModel<SearchViewModel.State>() {
 
     val subject = MutableLiveData<SearchMode>().apply {
@@ -27,12 +34,17 @@ class SearchViewModel constructor(val apiClient: ApiClient) :
         observeForever { _searchPhrase.onNext(it) }
     }
 
-    enum class SearchMode(@StringRes label: Int) {
+    @SuppressLint("DefaultLocale")
+    val searchHint = Transformations.map(subject) {
+        context.getString(R.string.search_by_hint).format(context.getString(it.label).toLowerCase())
+    }
+
+    enum class SearchMode(@StringRes val label: Int) {
         PLANET(R.string.subject_planet),
         PERSON(R.string.subject_person)
     }
 
-    val result = MutableLiveData<List<SearchResult>>()
+    val result = MutableLiveData<List<SearchResult<SwEntity>>>()
 
     private val _searchPhrase = BehaviorSubject.create<String>()
     private val _searchSubject = BehaviorSubject.createDefault(PLANET)
@@ -56,12 +68,11 @@ class SearchViewModel constructor(val apiClient: ApiClient) :
     private fun projectPhraseToSearch() {
         _searchPhrase
             .debounce(2, TimeUnit.SECONDS)
-            .distinctUntilChanged()
             .switchMap { phrase ->
                 _searchSubject
                     .map { subject ->
-                    phrase to subject
-                }
+                        phrase to subject
+                    }
             }
             .doOnNext { (phrase, subject) -> toState(State.Searching(phrase, subject)) }
             .switchMapCompletable { (phrase, mode) ->
@@ -97,14 +108,14 @@ class SearchViewModel constructor(val apiClient: ApiClient) :
         }
             .subscribeOn(Schedulers.computation())
             .doOnSuccess {
-                toState(State.Result(phrase, it))
+                toState(State.Result(phrase, it as List<SearchResult<SwEntity>>))
             }
             .ignoreElement()
 
     sealed class State {
         object Idle : State()
         data class Searching(val phrase: String, val subject: SearchMode) : State(), StateLoading
-        data class Result(val phrase: String, val result: List<SearchResult>) : State()
+        data class Result(val phrase: String, val result: List<SearchResult<SwEntity>>) : State()
         data class Error(override val throwable: Throwable) : State(), StateFail
     }
 }

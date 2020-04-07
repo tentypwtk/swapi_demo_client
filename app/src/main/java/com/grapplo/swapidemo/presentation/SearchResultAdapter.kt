@@ -7,10 +7,13 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.grapplo.swapidemo.R
 import com.grapplo.swapidemo.domain.SearchResult
+import com.grapplo.swapidemo.domain.SwEntity
 
 class SearchResultAdapter : RecyclerView.Adapter<SearchResultAdapter.VH>() {
 
-    var items: List<SearchResult> = emptyList()
+    var onItemSelected: ((Int, SearchResult<SwEntity>) -> Unit)? = null
+
+    var items: List<SearchResult<SwEntity>> = emptyList()
         set(value) {
             field = value.sortedBy { it.name }
             notifyDataSetChanged()
@@ -28,7 +31,7 @@ class SearchResultAdapter : RecyclerView.Adapter<SearchResultAdapter.VH>() {
         holder.bind(items[position])
     }
 
-    class VH(val view: View) : RecyclerView.ViewHolder(view) {
+    inner class VH(val view: View) : RecyclerView.ViewHolder(view) {
         private val labelLeft by lazy {
             view.findViewById<TextView>(R.id.left_label)
         }
@@ -36,7 +39,13 @@ class SearchResultAdapter : RecyclerView.Adapter<SearchResultAdapter.VH>() {
             view.findViewById<TextView>(R.id.right_label)
         }
 
-        fun bind(searchResult: SearchResult) {
+        fun bind(searchResult: SearchResult<SwEntity>) {
+            view.setOnClickListener {
+                onItemSelected?.invoke(
+                    items.indexOf(searchResult),
+                    searchResult
+                )
+            }
             labelLeft.text = searchResult.name
             labelRight.text =
                 when {
