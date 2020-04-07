@@ -1,6 +1,8 @@
 package com.grapplo.swapidemo
 
+import android.content.Context
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import androidx.test.core.app.ApplicationProvider
 import com.google.common.truth.Truth.assertThat
 import com.grapplo.swapidemo.api.ApiClient
 import com.grapplo.swapidemo.api.response.SwapiResponse
@@ -14,6 +16,9 @@ import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import org.junit.runner.RunWith
+import org.koin.android.ext.koin.androidContext
+import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.test.KoinTest
 import org.koin.test.KoinTestRule
@@ -22,14 +27,11 @@ import org.koin.test.mock.MockProviderRule
 import org.koin.test.mock.declareMock
 import org.mockito.BDDMockito.*
 import org.mockito.Mockito
+import org.robolectric.RobolectricTestRunner
 import java.util.concurrent.TimeUnit
 
+@RunWith(RobolectricTestRunner::class)
 class SearchViewModelTest : KoinTest {
-
-    @get:Rule
-    val koinTestRule = KoinTestRule.create {
-        modules(appModules)
-    }
 
     @get:Rule
     val rule = InstantTaskExecutorRule()
@@ -45,6 +47,11 @@ class SearchViewModelTest : KoinTest {
 
     @Before
     fun setup() {
+        stopKoin()
+        startKoin {
+            androidContext(ApplicationProvider.getApplicationContext())
+            modules(appModules)
+        }
         api = declareMock {
             given(searchPlanet(anyString())).willReturn(Single.just(emptyResponse))
         }
@@ -137,6 +144,7 @@ class SearchViewModelTest : KoinTest {
     }
 
     companion object {
-        val emptyResponse = SwapiResponse<Planet>(0, previous = null, next = null, results = emptyList())
+        val emptyResponse =
+            SwapiResponse<Planet>(0, previous = null, next = null, results = emptyList())
     }
 }
