@@ -74,6 +74,7 @@ class SearchViewModel constructor(
                         phrase to subject
                     }
             }
+            .distinctUntilChanged()
             .doOnNext { (phrase, subject) -> toState(State.Searching(phrase, subject)) }
             .switchMapCompletable { (phrase, mode) ->
                 if (phrase.isNotBlank()) {
